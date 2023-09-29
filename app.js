@@ -1,53 +1,53 @@
 (function () {
   const initialData = {
     type: 'folder',
-    title: 'root',
-    entries: [
+    name: 'root',
+    children: [
       {
         type: 'folder',
-        title: 'folder1',
-        entries: [
+        name: 'folder1',
+        children: [
           {
             type: 'file',
-            title: 'abc.js',
+            name: 'abc.js',
           },
           {
             type: 'file',
-            title: 'def.js',
+            name: 'def.js',
           },
         ],
       },
       {
         type: 'folder',
-        title: 'folder2',
-        entries: [
+        name: 'folder2',
+        children: [
           {
             type: 'folder',
-            title: 'folder3',
-            entries: [
+            name: 'folder3',
+            children: [
               {
                 type: 'file',
-                title: 'test.txt',
+                name: 'test.txt',
               },
               {
                 type: 'file',
-                title: 'image.jpg',
+                name: 'image.jpg',
               },
             ],
           },
           {
             type: 'file',
-            title: 'util.js',
+            name: 'util.js',
           },
         ],
       },
       {
         type: 'file',
-        title: 'index.html',
+        name: 'index.html',
       },
       {
         type: 'file',
-        title: 'app.js',
+        name: 'app.js',
       },
     ],
   };
@@ -56,40 +56,40 @@
 
   dfs(initialData, fileBrowserEl, 0);
 
-  function dfs(entry, parentEl) {
-    if (entry.type === 'file') {
-      createFile(entry.title, parentEl);
+  function dfs(node, parentEl) {
+    if (node.type === 'file') {
+      createFile(node.name, parentEl);
       return;
     }
 
-    const { entriesEl } = createFolder(entry.title, parentEl);
-    entry.entries?.forEach((child) => {
-      dfs(child, entriesEl);
+    const { childrenEl } = createFolder(node.name, parentEl);
+    node.children?.forEach((child) => {
+      dfs(child, childrenEl);
     });
   }
 
   function createFile(name, parentEl) {
-    const entryEl = document.createElement('div');
-    entryEl.className = 'entry';
+    const nodeEl = document.createElement('div');
+    nodeEl.className = 'node';
 
-    const titleEl = document.createElement('div');
-    titleEl.className = 'title';
-    titleEl.innerHTML = name;
-    entryEl.appendChild(titleEl);
+    const nodeNameEl = document.createElement('div');
+    nodeNameEl.className = 'node-name';
+    nodeNameEl.innerHTML = name;
+    nodeEl.appendChild(nodeNameEl);
 
-    parentEl.appendChild(entryEl);
+    parentEl.appendChild(nodeEl);
 
-    return entryEl;
+    return nodeEl;
   }
 
   function createFolder(name, parentEl) {
-    const entryEl = createFile(name, parentEl);
+    const nodeEl = createFile(name, parentEl);
 
-    const entriesEl = document.createElement('div');
-    entriesEl.className = `entries`;
-    entriesEl.style.paddingLeft = '24px';
-    entryEl.appendChild(entriesEl);
+    const childrenEl = document.createElement('div');
+    childrenEl.className = `children`;
+    childrenEl.style.paddingLeft = '24px';
+    nodeEl.appendChild(childrenEl);
 
-    return { entryEl, entriesEl };
+    return { nodeEl, childrenEl };
   }
 })();
